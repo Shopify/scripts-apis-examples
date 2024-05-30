@@ -17,9 +17,8 @@
     "typegen": "yarn workspaces run graphql-code-generator --config package.json",
     "test-js": "yarn expand-liquid vanilla-js && yarn workspaces run test run",
     "test-ts": "yarn expand-liquid typescript && yarn workspaces run test run",
-    "validate-settings": "node ./util/validate-settings.js",
     "check-api-version": "node ./util/check-api-version.js",
-    "check-dependencies": "node ./util/check-js-dependencies.js",
+    "check-js-dependencies": "node ./util/check-js-dependencies.js",
     "check-rust-dependencies": "node ./util/check-rust-dependencies.js"
   },
   "private": true,
