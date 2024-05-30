@@ -19,7 +19,11 @@
     "test-ts": "yarn expand-liquid typescript && yarn workspaces run test run",
     "check-api-version": "node ./util/check-api-version.js",
     "check-js-dependencies": "node ./util/check-js-dependencies.js",
-    "check-rust-dependencies": "node ./util/check-rust-dependencies.js"
+    "check-rust-dependencies": "node ./util/check-rust-dependencies.js",
+    "check-rust": "yarn check-rust-dependencies && yarn expand-liquid && cargo test",
+    "generate-app": "node ./util/generate-app.js",
+    "update-schemas": "node ./util/update-schemas.js",
+    "update-api-version": "yarn check-api-version && yarn expand-liquid && yarn update-schemas"
   },
   "private": true,
   "workspaces": [
