@@ -3,19 +3,22 @@
   "version": "1.0.0",
   "type": "module",
   "devDependencies": {
-    "@iarna/toml": "^2.2.5",
-    "fast-glob": "^3.2.11",
-    "liquidjs": "^9.37.0",
     "@graphql-codegen/cli": "^3.2.2",
     "@graphql-codegen/typescript": "^3.0.2",
     "@graphql-codegen/typescript-operations": "^3.0.2",
-    "graphql": "^16.6.0"
+    "@iarna/toml": "^2.2.5",
+    "dayjs": "^1.11.11",
+    "fast-glob": "^3.2.11",
+    "graphql": "^16.6.0",
+    "liquidjs": "^9.37.0"
   },
   "scripts": {
     "expand-liquid": "node ./util/expand-liquid.js",
     "typegen": "yarn workspaces run graphql-code-generator --config package.json",
     "test-js": "yarn expand-liquid vanilla-js && yarn workspaces run test run",
-    "test-ts": "yarn expand-liquid typescript && yarn workspaces run test run"
+    "test-ts": "yarn expand-liquid typescript && yarn workspaces run test run",
+    "validate-settings": "node ./util/validate-settings.js",
+    "check-api-version": "node ./util/check-api-version.js"
   },
   "private": true,
   "workspaces": [
