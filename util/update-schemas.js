@@ -4,27 +4,56 @@ import util from 'util';
 
 const execPromise = util.promisify(exec);
 const APP_TOML_FILE = 'shopify.app.toml';
-const COMMAND_TEMPLATE = 'shopify app function schema --path ';
+const COMMAND_TEMPLATE = 'shopify app function schema';
 
-// Method to read shopify.app.toml and extract the extension directories
-async function getExtensionDirectories() {
+// Method to read shopify.app.toml and extract needed configuration
+async function getConfig() {
   try {
     const content = await fs.readFile(APP_TOML_FILE, 'utf8');
     const lines = content.split('\n');
+    
+    const config = {
+      clientId: '',
+      directories: []
+    };
 
-    // Regular expression to match the extension directories
-    const regex = /'([^']+)'/g;
-    let match;
-    const directories = [];
+    let inExtensionDirectories = false;
+    const regex = /"([^"]+)"/g;
 
-    // Extract all directories from the lines
     for (const line of lines) {
-      while (match = regex.exec(line)) {
-        directories.push(match[1]);
+      const trimmedLine = line.trim();
+      
+      // Extract client_id
+      if (trimmedLine.startsWith('client_id')) {
+        const match = line.match(regex);
+        if (match) {
+          config.clientId = match[0].replace(/"/g, '');
+        }
+        continue;
+      }
+
+      // Check if we're entering the extension_directories section
+      if (trimmedLine.startsWith('extension_directories')) {
+        inExtensionDirectories = true;
+        continue;
+      }
+
+      // Check if we're leaving the extension_directories section
+      if (inExtensionDirectories && trimmedLine.startsWith(']')) {
+        inExtensionDirectories = false;
+        continue;
+      }
+
+      // Extract directories only when in extension_directories section
+      if (inExtensionDirectories && trimmedLine.startsWith('"')) {
+        const match = trimmedLine.match(regex);
+        if (match) {
+          config.directories.push(match[0].replace(/"/g, ''));
+        }
       }
     }
 
-    return directories;
+    return config;
   } catch (error) {
     console.error(`Error reading ${APP_TOML_FILE}:`, error);
     throw error;
@@ -34,10 +63,14 @@ async function getExtensionDirectories() {
 // Method to run the command for each directory
 async function updateSchemas() {
   try {
-    const directories = await getExtensionDirectories();
+    const config = await getConfig();
 
-    for (const dir of directories) {
-      const command = `${COMMAND_TEMPLATE}${dir}`;
+    if (!config.clientId) {
+      throw new Error('Client ID not found in shopify.app.toml');
+    }
+
+    for (const dir of config.directories) {
+      const command = `${COMMAND_TEMPLATE} --path ${dir} --client-id ${config.clientId}`;
       console.log(`Running: ${command}`);
 
       try {
