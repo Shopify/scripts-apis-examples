@@ -11,7 +11,7 @@
   },
   "codegen": {
     "schema": "schema.graphql",
-    "documents": "input.graphql",
+    "documents": "src/*.graphql",
     "generates": {
       "./generated/api.ts": {
         "plugins": [
@@ -19,6 +19,9 @@
           "typescript-operations"
         ]
       }
+    },
+    "config": {
+      "omitOperationSuffix": true
     }
   },
   "devDependencies": {

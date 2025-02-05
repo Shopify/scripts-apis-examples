@@ -1,13 +1,21 @@
-name = "{{name}}"
-type = "local_pickup_delivery_option_generator"
-{% if uid %}uid = "{{ uid }}"{% endif %}
 api_version = "unstable"
 
-[build]
-command = "cargo build --target=wasm32-wasip1 --release"
-path = "target/wasm32-wasip1/release/{{name | replace: " ", "-" | downcase}}.wasm"
-watch = [ "src/**/*.rs" ]
+[[extensions]]
+name = "t:name"
+handle = "{{handle}}"
+type = "function"
+{% if uid %}uid = "{{ uid }}"{% endif %}
 
-[ui.paths]
-create = "/"
-details = "/"
+  [[extensions.targeting]]
+  target = "purchase.local-pickup-delivery-option-generator.run"
+  input_query = "src/run.graphql"
+  export = "run"
+
+  [extensions.build]
+  command = "cargo build --target=wasm32-wasip1 --release"
+  path = "target/wasm32-wasip1/release/{{handle | replace: " ", "-" | downcase}}.wasm"
+  watch = [ "src/**/*.rs" ]
+
+  [extensions.ui.paths]
+  create = "/"
+  details = "/"

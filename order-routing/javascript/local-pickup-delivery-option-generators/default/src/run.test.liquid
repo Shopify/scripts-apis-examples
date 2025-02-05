@@ -1,14 +1,15 @@
 {%- if flavor contains "vanilla-js" -%}
 import { describe, it, expect } from 'vitest';
-import deliveryOptionGenerator from './index';
+import { run } from './run';
 
 /**
- * @typedef {import("../generated/api").FunctionResult} FunctionResult
+ * @typedef {import("../generated/api").RunInput} RunInput
+ * @typedef {import("../generated/api").FunctionRunResult} FunctionRunResult
  */
 
 describe('local pickup delivery option generator function', () => {
   it('returns a delivery option', () => {
-    const result = deliveryOptionGenerator({
+    const result = run({
       cart: {
         lines: [
           {
@@ -43,7 +44,7 @@ describe('local pickup delivery option generator function', () => {
         metafield: null
       }
     });
-    const expected = /** @type {FunctionResult} */ ({
+    const expected = /** @type {FunctionRunResult} */ ({
       operations: [
         {
           add: {
@@ -63,12 +64,12 @@ describe('local pickup delivery option generator function', () => {
 });
 {%- elsif flavor contains "typescript" -%}
 import { describe, it, expect } from 'vitest';
-import deliveryOptionGenerator from './index';
-import { FunctionResult } from '../generated/api';
+import { run } from './run';
+import { RunInput, FunctionRunResult } from '../generated/api';
 
 describe('local pickup delivery option generator function', () => {
   it('returns a delivery option', () => {
-    const result = deliveryOptionGenerator({
+    const result = run({
       cart: {
         lines: [
           {
@@ -103,7 +104,7 @@ describe('local pickup delivery option generator function', () => {
         metafield: null
       }
     });
-    const expected: FunctionResult = {
+    const expected: FunctionRunResult = {
       operations: [
         {
           add: {

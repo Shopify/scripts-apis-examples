@@ -1,0 +1,61 @@
+{%- if flavor contains "vanilla-js" -%}
+// @ts-check
+
+/**
+ * @typedef {import("../generated/api").RunInput} RunInput
+ * @typedef {import("../generated/api").FunctionRunResult} FunctionRunResult
+ */
+
+/**
+ * @param {RunInput} input
+ * @returns {FunctionRunResult}
+ */
+export function run(input) {
+  const configuration = JSON.parse(
+    input?.deliveryOptionGenerator?.metafield?.value ?? "{}"
+  );
+
+  return {
+    operations: [
+      {
+        add: {
+          title: "Main St.",
+          cost: 1.99,
+          pickupLocation: {
+            locationHandle: "2578303",
+            pickupInstruction: "Usually ready in 24 hours."
+          }
+        }
+      }
+    ],
+  };
+}
+{%- elsif flavor contains "typescript" -%}
+import {
+  RunInput,
+  FunctionRunResult,
+} from "../generated/api";
+
+type Configuration = {};
+
+export function run(input: RunInput): FunctionRunResult {
+  const configuration: Configuration = JSON.parse(
+    input?.deliveryOptionGenerator?.metafield?.value ?? "{}"
+  );
+
+  return {
+    operations: [
+      {
+        add: {
+          title: "Main St.",
+          cost: 1.99,
+          pickupLocation: {
+            locationHandle: "2578303",
+            pickupInstruction: "Usually ready in 24 hours."
+          }
+        }
+      }
+    ],
+  };
+}
+{%- endif -%}
