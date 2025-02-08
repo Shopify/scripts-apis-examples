@@ -3,7 +3,7 @@ import "@shopify/discount-app-components/build/esm/styles.css";
 
 export function DiscountProvider({ children }) {
   return (
-    <AppProvider locale="en-US" ianaTimezone="America/Toronto">
+    <AppProvider locale="en" ianaTimezone="America/Toronto">
       {children}
     </AppProvider>
   );
